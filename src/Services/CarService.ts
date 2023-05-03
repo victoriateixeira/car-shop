@@ -23,6 +23,11 @@ class CarService {
 
     return carsArray;
   }
+  async getById(id: string): Promise<Car | null> {
+    const carODM = new CarODM();
+    const car = await carODM.getById(id);
+    return this.createCarDomain(car as ICar);
+  }
 }
 
 export default CarService;
