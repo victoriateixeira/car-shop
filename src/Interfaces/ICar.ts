@@ -1,6 +1,6 @@
-import IAuto from './IAuto';
+import IVehicle from './IVehicle';
 
-interface ICar extends IAuto {
+interface ICar extends IVehicle {
   doorsQty: number;
   seatsQty: number;
 }
