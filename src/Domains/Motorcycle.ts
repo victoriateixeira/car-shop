@@ -3,7 +3,7 @@ import Vehicle from './Vehicle';
 
 class Motorcycle extends Vehicle {
   private category: string;
-  private engineCapacity: string;
+  private engineCapacity: number;
 
   constructor(
     { id,
@@ -38,7 +38,7 @@ class Motorcycle extends Vehicle {
     return this.engineCapacity;
   }
 
-  setEngineCapacity(engineCapacity:string) {
+  setEngineCapacity(engineCapacity:number) {
     this.engineCapacity = engineCapacity;
   }
 }

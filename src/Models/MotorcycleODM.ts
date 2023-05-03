@@ -12,7 +12,7 @@ class MotorcycleODM extends AbstractODM<IMotorcycle> {
       status: { type: Boolean, required: false },
       buyValue: { type: Number, required: true },
       category: { type: String, required: true },
-      engineCapacity: { type: String, required: true },
+      engineCapacity: { type: Number, required: true },
     });
     super(schema, 'Motorcycle');
   }

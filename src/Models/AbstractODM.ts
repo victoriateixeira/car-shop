@@ -1,7 +1,7 @@
 import { Model, Schema, models,
   model, isValidObjectId, UpdateQuery } from 'mongoose';
 import BadRequestError from '../Errors/BadRequestError';
-import NotFoundError from '../Errors/NotFoundError';
+// import NotFoundError from '../Errors/NotFoundError';
 
 abstract class AbstractODM<T> {
   protected model: Model<T>;
@@ -28,9 +28,9 @@ abstract class AbstractODM<T> {
 
   public async update(id: string, obj: Partial<T>):
   Promise<T | null> {
-    const isId = await this.getById(id);
-    if (isId === null) throw new NotFoundError('Car not found');
-    // if (!isValidObjectId(id)) throw new BadRequestError('Invalid Mongo id');
+    // const isId = await this.getById(id);
+    // if (isId === null) throw new NotFoundError('Car not found');
+    if (!isValidObjectId(id)) throw new BadRequestError('Invalid Mongo id');
     
     return this.model.findByIdAndUpdate(
       { _id: id },

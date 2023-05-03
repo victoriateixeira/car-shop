@@ -2,10 +2,11 @@ import { Model } from 'mongoose';
 import sinon from 'sinon';
 import { expect } from 'chai';
 import CarService from '../../../src/Services/CarService';
+import AbstractODM from '../../../src/Models/AbstractODM';
 
 describe('Testa as funções de CarService', function () {
-  describe('Deve criar um registro de um carro no banco de dados COM SUCESSO', function () {
-    it('Deve criar um novo carro no banco de dados com sucesso', async function () {
+  describe('Rota POST /cars', function () {
+    it('Deve criar um novo carro no banco de dados COM SUCESSO', async function () {
       const carInput = {
         model: 'Marea',
         year: 2002,
@@ -34,7 +35,7 @@ describe('Testa as funções de CarService', function () {
       expect(result).to.be.deep.equal(carOutput);
     });
   });
-  describe('Deve retornar todos os carros registrados no db', function () {
+  describe('Rota GET /cars', function () {
     it('deve retornar todos os carros COM SUCESSO', async function () {
       const cars = [
         {
@@ -66,7 +67,7 @@ describe('Testa as funções de CarService', function () {
       expect(result).to.be.deep.equal(cars);
     });
   });
-  describe('Deve retornar um carro específico quando buscado pelo seu ID', function () {
+  describe('Rota GET /cars:id', function () {
     it('deve lançar um erro quando o ID é inválido', async function () {
       const id = 'ID_INVALIDO';
 
@@ -79,9 +80,9 @@ describe('Testa as funções de CarService', function () {
         expect((error as Error).message).to.be.equal('Invalid mongo id');
       }
     });
-    it('deve lançar um erro quando o ID não é encontrado', async function () {
-      const id = 'NOT_FOUND_ID';
-
+    it('deve lançar um erro quando o ID é inexistente', async function () {
+      const id = '634852326b35b59438fbea2f';
+    
       sinon.stub(Model, 'findById').resolves(null);
 
       try {
@@ -107,6 +108,75 @@ describe('Testa as funções de CarService', function () {
       const service = new CarService();
       const result = await service.getById(id);
       expect(result).to.be.deep.equal(carOutput);
+    });
+  });
+  describe('Rota PUT /cars/:id', function () {
+    it('Deve retornar um carro atualizado COM SUCESSO', async function () {
+      const id = '634852326b35b59438fbea2f';
+      const carInput = {
+        model: 'Marea',
+        year: 2003,
+        color: 'Black',
+        status: true,
+        buyValue: 15.99,
+        doorsQty: 4,
+        seatsQty: 5,
+      };
+      const carOutput = {
+        id: '634852326b35b59438fbea2f',
+        model: 'Marea',
+        year: 2003,
+        color: 'Black',
+        status: true,
+        buyValue: 15.99,
+        doorsQty: 4,
+        seatsQty: 5,
+      };
+      sinon.stub(Model, 'findById').resolves(carOutput);
+      sinon.stub(Model, 'findByIdAndUpdate').resolves(carOutput);
+      const service = new CarService();
+      const result = await service.update(id, carInput);
+      expect(result).to.be.deep.equal(carOutput);
+    });
+    it('Deve lançar um erro se o ID é inválido', async function () {
+      const id = 'ID_INVALIDO';
+      const carInput = {
+        model: 'Marea',
+        year: 2003,
+        color: 'Black',
+        status: true,
+        buyValue: 15.99,
+        doorsQty: 4,
+        seatsQty: 5,
+      };
+      sinon.stub(Model, 'findByIdAndUpdate').resolves({});
+
+      try {
+        const service = new CarService();
+        await service.update(id, carInput);
+      } catch (error) {
+        expect((error as Error).message).to.be.equal('Invalid mongo id');
+      }
+    });
+    it('Deve lançar um erro se o ID é inexistente ', async function () {
+      const id = '634852326b35b59438fbea2f';
+      const carInput = {
+        model: 'Marea',
+        year: 2003,
+        color: 'Black',
+        status: true,
+        buyValue: 15.99,
+        doorsQty: 4,
+        seatsQty: 5,
+      };
+      sinon.stub(Model, 'findById').resolves(null);
+
+      try {
+        const service = new CarService();
+        await service.update(id, carInput);
+      } catch (error) {
+        expect((error as Error).message).to.be.equal('Car not found');
+      }
     });
   });
   afterEach(function () {
