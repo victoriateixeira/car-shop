@@ -5,7 +5,7 @@ import CarService from '../../../src/Services/CarService';
 
 describe('Testa as funções de CarService', function () {
   describe('Deve criar um registro de um carro no banco de dados COM SUCESSO', function () {
-    it('Deve criar um novo carro no banco de dados com sucesso', function () {
+    it('Deve criar um novo carro no banco de dados com sucesso', async function () {
       const carInput = {
         model: 'Marea',
         year: 2002,
@@ -29,7 +29,7 @@ describe('Testa as funções de CarService', function () {
     
       sinon.stub(Model, 'create').resolves(carOutput);
       const service = new CarService();
-      const result = service.createCar(carInput);
+      const result = await service.createCar(carInput);
   
       expect(result).to.be.deep.equal(carOutput);
     });
@@ -52,6 +52,7 @@ describe('Testa as funções de CarService', function () {
           model: 'Tempra',
           year: 1995,
           color: 'Black',
+          status: false,
           buyValue: 39,
           doorsQty: 2,
           seatsQty: 5,
@@ -90,8 +91,8 @@ describe('Testa as funções de CarService', function () {
         expect((error as Error).message).to.be.equal('Car not found');
       }
     });
-    it('deve retornar o carro buscado com sucesso', async function () {
-      const id = 'VALID_ID';
+    it('deve retornar o carro buscado COM SUCESSO', async function () {
+      const id = '634852326b35b59438fbea2f';
       const carOutput = {
         id: '634852326b35b59438fbea2f',
         model: 'Marea',
@@ -102,10 +103,13 @@ describe('Testa as funções de CarService', function () {
         doorsQty: 4,
         seatsQty: 5,
       };
-      sinon.stub(Model, 'findById').resolves(null);
+      sinon.stub(Model, 'findById').resolves(carOutput);
       const service = new CarService();
       const result = await service.getById(id);
       expect(result).to.be.deep.equal(carOutput);
     });
+  });
+  afterEach(function () {
+    sinon.restore();
   });
 });
