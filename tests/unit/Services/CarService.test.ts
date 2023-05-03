@@ -2,32 +2,52 @@ import { Model } from 'mongoose';
 import sinon from 'sinon';
 import { expect } from 'chai';
 import CarService from '../../../src/Services/CarService';
-import AbstractODM from '../../../src/Models/AbstractODM';
 
 describe('Testa as funções de CarService', function () {
+  const carInput = {
+    model: 'Marea',
+    year: 2002,
+    color: 'Black',
+    status: true,
+    buyValue: 15.990,
+    doorsQty: 4,
+    seatsQty: 5,
+  };
+
+  const carOutput = {
+    id: '6348513f34c397abcad040b2',
+    model: 'Marea',
+    year: 2002,
+    color: 'Black',
+    status: true,
+    buyValue: 15.990,
+    doorsQty: 4,
+    seatsQty: 5,
+  };
+  const cars = [
+    {
+      id: '634852326b35b59438fbea2f',
+      model: 'Marea',
+      year: 2002,
+      color: 'Black',
+      status: true,
+      buyValue: 15.99,
+      doorsQty: 4,
+      seatsQty: 5,
+    },
+    {
+      id: '634852326b35b59438fbea31',
+      model: 'Tempra',
+      year: 1995,
+      color: 'Black',
+      status: false,
+      buyValue: 39,
+      doorsQty: 2,
+      seatsQty: 5,
+    },
+  ];
   describe('Rota POST /cars', function () {
     it('Deve criar um novo carro no banco de dados COM SUCESSO', async function () {
-      const carInput = {
-        model: 'Marea',
-        year: 2002,
-        color: 'Black',
-        status: true,
-        buyValue: 15.990,
-        doorsQty: 4,
-        seatsQty: 5,
-      };
-    
-      const carOutput = {
-        id: '6348513f34c397abcad040b2',
-        model: 'Marea',
-        year: 2002,
-        color: 'Black',
-        status: true,
-        buyValue: 15.990,
-        doorsQty: 4,
-        seatsQty: 5,
-      };
-    
       sinon.stub(Model, 'create').resolves(carOutput);
       const service = new CarService();
       const result = await service.createCar(carInput);
@@ -37,29 +57,6 @@ describe('Testa as funções de CarService', function () {
   });
   describe('Rota GET /cars', function () {
     it('deve retornar todos os carros COM SUCESSO', async function () {
-      const cars = [
-        {
-          id: '634852326b35b59438fbea2f',
-          model: 'Marea',
-          year: 2002,
-          color: 'Black',
-          status: true,
-          buyValue: 15.99,
-          doorsQty: 4,
-          seatsQty: 5,
-        },
-        {
-          id: '634852326b35b59438fbea31',
-          model: 'Tempra',
-          year: 1995,
-          color: 'Black',
-          status: false,
-          buyValue: 39,
-          doorsQty: 2,
-          seatsQty: 5,
-        },
-      ];
-    
       sinon.stub(Model, 'find').resolves(cars);
       const service = new CarService();
       const result = await service.getAll();
@@ -93,17 +90,8 @@ describe('Testa as funções de CarService', function () {
       }
     });
     it('deve retornar o carro buscado COM SUCESSO', async function () {
-      const id = '634852326b35b59438fbea2f';
-      const carOutput = {
-        id: '634852326b35b59438fbea2f',
-        model: 'Marea',
-        year: 2002,
-        color: 'Black',
-        status: true,
-        buyValue: 15.99,
-        doorsQty: 4,
-        seatsQty: 5,
-      };
+      const id = '6348513f34c397abcad040b2';
+ 
       sinon.stub(Model, 'findById').resolves(carOutput);
       const service = new CarService();
       const result = await service.getById(id);
@@ -112,26 +100,7 @@ describe('Testa as funções de CarService', function () {
   });
   describe('Rota PUT /cars/:id', function () {
     it('Deve retornar um carro atualizado COM SUCESSO', async function () {
-      const id = '634852326b35b59438fbea2f';
-      const carInput = {
-        model: 'Marea',
-        year: 2003,
-        color: 'Black',
-        status: true,
-        buyValue: 15.99,
-        doorsQty: 4,
-        seatsQty: 5,
-      };
-      const carOutput = {
-        id: '634852326b35b59438fbea2f',
-        model: 'Marea',
-        year: 2003,
-        color: 'Black',
-        status: true,
-        buyValue: 15.99,
-        doorsQty: 4,
-        seatsQty: 5,
-      };
+      const id = '6348513f34c397abcad040b2';
       sinon.stub(Model, 'findById').resolves(carOutput);
       sinon.stub(Model, 'findByIdAndUpdate').resolves(carOutput);
       const service = new CarService();
@@ -140,15 +109,7 @@ describe('Testa as funções de CarService', function () {
     });
     it('Deve lançar um erro se o ID é inválido', async function () {
       const id = 'ID_INVALIDO';
-      const carInput = {
-        model: 'Marea',
-        year: 2003,
-        color: 'Black',
-        status: true,
-        buyValue: 15.99,
-        doorsQty: 4,
-        seatsQty: 5,
-      };
+
       sinon.stub(Model, 'findByIdAndUpdate').resolves({});
 
       try {
@@ -159,16 +120,8 @@ describe('Testa as funções de CarService', function () {
       }
     });
     it('Deve lançar um erro se o ID é inexistente ', async function () {
-      const id = '634852326b35b59438fbea2f';
-      const carInput = {
-        model: 'Marea',
-        year: 2003,
-        color: 'Black',
-        status: true,
-        buyValue: 15.99,
-        doorsQty: 4,
-        seatsQty: 5,
-      };
+      const id = '6348513f34c397abcad040b2';
+
       sinon.stub(Model, 'findById').resolves(null);
 
       try {

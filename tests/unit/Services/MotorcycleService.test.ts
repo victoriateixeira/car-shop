@@ -27,13 +27,7 @@ describe('Testa as funções de MotorcycleService', function () {
   const motos = [
     {
       id: '634852326b35b59438fbea2f',
-      model: 'Honda Cb 600f Hornet',
-      year: 2005,
-      color: 'Yellow',
-      status: true,
-      buyValue: 30.000,
-      category: 'Street',
-      engineCapacity: 600,
+      ...motoInput,
     },
     motoOutput,
   ];
