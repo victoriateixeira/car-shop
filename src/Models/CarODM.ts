@@ -1,7 +1,7 @@
 import { Model, Schema, model, models, isValidObjectId } from 'mongoose';
 
 import ICar from '../Interfaces/ICar';
-import NotFoundError from '../Errors/NotFoundError';
+
 import BadRequestError from '../Errors/BadRequestError';
 
 class CarODM {
