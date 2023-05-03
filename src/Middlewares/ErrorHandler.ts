@@ -1,15 +1,10 @@
-import { Request, Response, NextFunction } from 'express';
+import { ErrorRequestHandler } from 'express';
 
-class ErrorHandler {
-  public static handle(
-    error: Error, 
-    req: Request, 
-    res: Response, 
-    next: NextFunction,
-  ) {
-    res.status(500).json({ message: error.message });
-    next();
+const errorMiddleware: ErrorRequestHandler = (err, _req, res, _next) => {
+  if (err.statusCode) {
+    return res.status(err.statusCode).json({ message: err.message });
   }
-}
+  return res.status(500).json({ message: err.message });
+};
 
-export default ErrorHandler;
+export default errorMiddleware;
