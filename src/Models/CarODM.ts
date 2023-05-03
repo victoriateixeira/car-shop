@@ -1,8 +1,9 @@
-import { Model, Schema, model, models, isValidObjectId } from 'mongoose';
+import { Model, Schema, model, models, isValidObjectId, UpdateQuery } from 'mongoose';
 
 import ICar from '../Interfaces/ICar';
 
 import BadRequestError from '../Errors/BadRequestError';
+import NotFoundError from '../Errors/NotFoundError';
 
 class CarODM {
   private schema: Schema;
@@ -34,6 +35,17 @@ class CarODM {
     const car = this.model.findById(id);
     // if (!car) throw new NotFoundError('Car not found');
     return car;
+  }
+
+  public async update(id: string, car: ICar): Promise<ICar | null> {
+    const isId = await this.getById(id);
+    if (isId === null) throw new NotFoundError('Car not found');
+    const updatedCar = this.model.findByIdAndUpdate(
+      { _id: id },
+      { ...car } as UpdateQuery <ICar>,
+      { new: true },
+    );
+    return updatedCar;
   }
 }
 export default CarODM;

@@ -30,6 +30,12 @@ class CarService {
     if (car === null) throw new NotFoundError('Car not found');
     return this.createCarDomain(car as ICar);
   }
+
+  async update(id: string, car: ICar): Promise <Car | null> {
+    const carODM = new CarODM();
+    const updatedCar = await carODM.update(id, car);
+    return this.createCarDomain(updatedCar as ICar);
+  }
 }
 
 export default CarService;
