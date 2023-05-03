@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import CarService from '../Services/CarService';
 import ICar from '../Interfaces/ICar';
-import BadRequestError from '../Errors/BadRequestError';
 
 class CarController {
   private req: Request;
@@ -37,7 +36,6 @@ class CarController {
 
   async getById() {
     const { id } = this.req.params;
-    if (typeof id !== 'string') throw new BadRequestError('Invalid mongo id');
     try {
       const car = await this.service.getById(id);
       return this.res.status(200).json(car);

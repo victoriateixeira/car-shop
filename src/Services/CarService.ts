@@ -1,4 +1,5 @@
 import Car from '../Domains/Car';
+import NotFoundError from '../Errors/NotFoundError';
 import ICar from '../Interfaces/ICar';
 import CarODM from '../Models/CarODM';
 
@@ -26,6 +27,7 @@ class CarService {
   async getById(id: string): Promise<Car | null> {
     const carODM = new CarODM();
     const car = await carODM.getById(id);
+    if (car === null) throw new NotFoundError('Car not found');
     return this.createCarDomain(car as ICar);
   }
 }
